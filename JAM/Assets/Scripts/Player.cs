@@ -15,8 +15,12 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask dashLayers;
     [SerializeField] private float fatorGasteTocha;
     [SerializeField] private Image referenciaImagemTocha;
+    [SerializeField] private Image referenciaImagemVida;
     [SerializeField] private GameObject referenciaTocha;
     [SerializeField] private Light pointLight;
+    [SerializeField] private int maxVida;
+    [SerializeField] private Image danoFeedBack;
+    [SerializeField] private Image morrendoFeedBack;
 
     private float tempoRestante;
     private float velocidade;
@@ -29,7 +33,8 @@ public class Player : MonoBehaviour
     private Vector3 clampedDir;
     private int tempoTocha;
     private int vida;
-    private int maxVida;
+    private Rigidbody rb;
+    public bool paused;
 
     void Start()
     {
@@ -38,6 +43,11 @@ public class Player : MonoBehaviour
         recarregado = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
+        rb = GetComponent<Rigidbody>();
+        vida = maxVida;
+        referenciaImagemVida.fillAmount = vida / maxVida;
+        danoFeedBack.CrossFadeAlpha(0, 0f, true);
+        morrendoFeedBack.CrossFadeAlpha(0f, 0f, true);
     }
     void Update()
     {
@@ -63,99 +73,115 @@ public class Player : MonoBehaviour
             pointLight.intensity = tempoRestante / tempoTocha;
         #endregion
     }
-
-    void TomarDano(int danoRecebido)
+    public void TomarDano(int dano)
     {
-        vida = vida - danoRecebido;
-        if(vida <= 0)
+        StartCoroutine(feedBackDano());
+        vida = vida - dano;
+        referenciaImagemVida.fillAmount = (float)vida / maxVida;
+        if (vida <= maxVida * 0.3f) 
         {
-            //Morreu;
+            morrendoFeedBack.CrossFadeAlpha(1, 0.5f, true);
         }
+        if (vida <= 0)
+        {
+            Morrer();
+        }
+    }
+    IEnumerator feedBackDano()
+    {
+        float tempo = 0.2f;
+
+        danoFeedBack.CrossFadeAlpha(1, tempo, true);
+        yield return new WaitForSeconds(tempo);
+        danoFeedBack.CrossFadeAlpha(0, tempo, true);
     }
     void Movimento()
     {
-        float yAxis = Input.GetAxis("Vertical");
-        float xAxis = Input.GetAxis("Horizontal");
+        if (!paused)
+        {
+            float yAxis = Input.GetAxis("Vertical");
+            float xAxis = Input.GetAxis("Horizontal");
 
-        float y = Mathf.Lerp(animY, yAxis, 0.4f);
-        float x = Mathf.Lerp(animX, xAxis, 0.4f);
+            float y = Mathf.Lerp(animY, yAxis, 0.4f);
+            float x = Mathf.Lerp(animX, xAxis, 0.4f);
 
-        Vector3 dir = (pontoRotacao.forward * y) + (pontoRotacao.right * x);
-        clampedDir = dir;
+            Vector3 dir = (pontoRotacao.forward * y) + (pontoRotacao.right * x);
+            clampedDir = dir;
 
-        if (dir.magnitude > 1)
-            clampedDir = dir.normalized;
+            if (dir.magnitude > 1)
+                clampedDir = dir.normalized;
 
-        transform.position += (clampedDir * velocidade) * Time.deltaTime;
+            rb.velocity = clampedDir * velocidadeReal * Time.deltaTime;
+            //transform.position += (clampedDir * velocidade) * Time.deltaTime;
 
-        animX = x;
-        animY = y;
+            animX = x;
+            animY = y;
+        }
     }
     void Rotacao()
     {
-        RotacaoInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
-        VelocidadeRotacao = RotacaoInput * velocidade;
-
-        Ray cameraRay = camera.ScreenPointToRay(Input.mousePosition);
-        Plane planoChao = new Plane(Vector3.up, Vector3.zero);
-        float tamanhoRaio;
-
-        if (planoChao.Raycast(cameraRay, out tamanhoRaio))
+        if (!paused)
         {
-            Vector3 pontoRotacao = cameraRay.GetPoint(tamanhoRaio);
-            transform.LookAt(new Vector3(pontoRotacao.x, transform.position.y, pontoRotacao.z));
+            RotacaoInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+            VelocidadeRotacao = RotacaoInput * velocidade;
+
+            Ray cameraRay = camera.ScreenPointToRay(Input.mousePosition);
+            Plane planoChao = new Plane(Vector3.up, Vector3.zero);
+            float tamanhoRaio;
+
+            if (planoChao.Raycast(cameraRay, out tamanhoRaio))
+            {
+                Vector3 pontoRotacao = cameraRay.GetPoint(tamanhoRaio);
+                transform.LookAt(new Vector3(pontoRotacao.x, transform.position.y, pontoRotacao.z));
+            }
         }
     }
     void Tiro()
     {
-        if (Input.GetMouseButton(1))
+        if (!paused)
         {
-            velocidade = velocidadeMira;
-            Cursor.visible = true;
-        }
-        else
-        {
-            velocidade = velocidadeReal;
-            Cursor.visible = false;
-        }
+            if (Input.GetMouseButton(1))
+            {
+                velocidade = velocidadeMira;
+                Cursor.visible = true;
+            }
+            else
+            {
+                velocidade = velocidadeReal;
+                Cursor.visible = false;
+            }
 
-        if (Input.GetMouseButtonDown(0) && recarregado)
-        {
-            GameObject bala = Instantiate(tiro, pontoTiro.position, Quaternion.identity);
-            bala.GetComponent<Rigidbody>().AddForce(transform.forward * 20 , ForceMode.Impulse);
-            recarregado = false;
-            Destroy(bala, 10f);
-        }
-        else if (!recarregado && Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("Reccaregei");
-            recarregado = true;
+            if (Input.GetMouseButtonDown(0) && recarregado)
+            {
+                GameObject bala = Instantiate(tiro, pontoTiro.position, Quaternion.identity);
+                bala.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
+                recarregado = false;
+                Destroy(bala, 10f);
+            }
+            else if (!recarregado && Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("Reccaregei");
+                recarregado = true;
+            }
         }
     }
     IEnumerator Dash()
     {
-        float inicioDash = Time.time;
-        //RaycastHit hit;
-        while (Time.time < inicioDash + tempoDash)
+        if (!paused)
         {
-            /*if (Physics.Raycast(new Vector3(pontoTiro.position.x, pontoTiro.position.y, pontoTiro.position.z), clampedDir, out hit, 10f, dashLayers) && Vector3.Distance(hit.point, this.transform.position) <= 1f)
+            float inicioDash = Time.time;
+            //RaycastHit hit;
+            while (Time.time < inicioDash + tempoDash)
             {
-                Debug.Log(hit.collider.name);
-                yield break;
+                rb.velocity = (clampedDir * velocidadeDash) * Time.deltaTime;
+                Debug.Log("nao saiu");
+                yield return null;
             }
-            else
-            {*/
-            transform.position += (clampedDir * velocidadeDash) * Time.deltaTime;
-            //}
-            //Debug.Log(Vector3.Distance(hit.point, this.transform.position) <= .1f);
-            /*if (!colidindo)
-            {
-                Debug.Log(colidindo);
-                transform.position += (clampedDir * velocidadeDash) * Time.deltaTime;
-            }*/
-            Debug.Log("nao saiu");
-            yield return null;
         }
+    }
+    private void Morrer()
+    {
+        Debug.Log("GameOver");
     }
     public void RecarregarTocha(int tempoTocha)
     {
