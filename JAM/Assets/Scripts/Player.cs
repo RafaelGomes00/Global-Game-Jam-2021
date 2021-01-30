@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int maxVida;
     [SerializeField] private Image danoFeedBack;
     [SerializeField] private Image morrendoFeedBack;
+    [SerializeField] private Animator animator;
 
     private float tempoRestante;
     private float velocidade;
@@ -84,6 +85,7 @@ public class Player : MonoBehaviour
         }
         if (vida <= 0)
         {
+            animator.SetTrigger("Morrer");
             Morrer();
         }
     }
@@ -113,9 +115,13 @@ public class Player : MonoBehaviour
 
             rb.velocity = clampedDir * velocidadeReal * Time.deltaTime;
             //transform.position += (clampedDir * velocidade) * Time.deltaTime;
-
+            animator.SetBool("Correr", true);
             animX = x;
             animY = y;
+            if(xAxis == 0 && xAxis == 0)
+            {
+                animator.SetBool("Correr", false);
+            }
         }
     }
     void Rotacao()
@@ -142,17 +148,20 @@ public class Player : MonoBehaviour
         {
             if (Input.GetMouseButton(1))
             {
+                animator.SetBool("Mirar", true);
                 velocidade = velocidadeMira;
                 Cursor.visible = true;
             }
             else
             {
+                animator.SetBool("Mirar", false);
                 velocidade = velocidadeReal;
                 Cursor.visible = false;
             }
 
             if (Input.GetMouseButtonDown(0) && recarregado)
             {
+                animator.SetTrigger("Atacar");
                 GameObject bala = Instantiate(tiro, pontoTiro.position, Quaternion.identity);
                 bala.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
                 recarregado = false;
@@ -160,6 +169,7 @@ public class Player : MonoBehaviour
             }
             else if (!recarregado && Input.GetKeyDown(KeyCode.R))
             {
+                animator.SetTrigger("Recarregar");
                 Debug.Log("Reccaregei");
                 recarregado = true;
             }
@@ -175,6 +185,7 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = (clampedDir * velocidadeDash) * Time.deltaTime;
                 Debug.Log("nao saiu");
+                animator.SetTrigger("Rolar");
                 yield return null;
             }
         }
