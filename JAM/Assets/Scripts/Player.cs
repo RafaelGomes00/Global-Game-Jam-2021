@@ -39,7 +39,11 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        RecarregarTocha(100);
+        morrendoFeedBack = GameObject.FindGameObjectWithTag("MorrendoFeedback").GetComponent<Image>();
+        danoFeedBack = GameObject.FindGameObjectWithTag("DanoFeedback").GetComponent<Image>();
+        referenciaImagemVida = GameObject.FindGameObjectWithTag("ImagemVida").GetComponent<Image>();
+        referenciaImagemTocha = GameObject.FindGameObjectWithTag("ImagemTocha").GetComponent<Image>();
+        RecarregarTocha(300);
         camera = FindObjectOfType<Camera>();
         recarregado = true;
         Cursor.visible = false;
@@ -115,8 +119,13 @@ public class Player : MonoBehaviour
 
             if (dir.magnitude > 1)
                 clampedDir = dir.normalized;
-
+            if (yAxis != 0 || xAxis != 0)
             rb.velocity = clampedDir * velocidade * Time.deltaTime;
+            else
+            {
+                rb.velocity = clampedDir * 0;
+            }
+
             //transform.position += (clampedDir * velocidade) * Time.deltaTime;
             animator.SetBool("Correr", true);
             animX = x;
