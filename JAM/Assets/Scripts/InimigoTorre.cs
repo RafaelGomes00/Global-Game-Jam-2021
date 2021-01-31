@@ -11,7 +11,7 @@ public class InimigoTorre : MonoBehaviour
     [SerializeField] private float velocidadeAtaque;
     [SerializeField] private float distanciaAtaque;
     [SerializeField] private int maxVida;
-    [SerializeField] private GameObject cilindro;
+    [SerializeField] private Animator animator;
     private int vida;
     private GameObject player;
     private bool podeAtacar;
@@ -33,6 +33,7 @@ public class InimigoTorre : MonoBehaviour
         vida = vida - dano;
         if (vida <= 0)
         {
+            
             Morrer();
         }
     }
@@ -49,6 +50,7 @@ public class InimigoTorre : MonoBehaviour
         //anim.SetBool("Atacar", false);
         StopCoroutine(mira);
         //anim.ResetTrigger("Atirar");
+        animator.SetTrigger("Atirar");
         GameObject balaInstanciada = Instantiate(tiro, pontoTiro.position, Quaternion.identity);
         balaInstanciada.transform.LookAt(player.transform);
         StartCoroutine(EmpurraBala(balaInstanciada, player.transform));
@@ -56,6 +58,7 @@ public class InimigoTorre : MonoBehaviour
         //balaInstanciada.GetComponent<Bala>().SetCasterCollider(this.GetComponent<Collider>());
 
         yield return new WaitForSeconds(velocidadeAtaque);
+        animator.SetBool("Mirar", false);
         podeAtacar = true;
     }
     private IEnumerator EmpurraBala(GameObject balaInstanciada, Transform playerTransform)
@@ -99,6 +102,7 @@ public class InimigoTorre : MonoBehaviour
         while (true)
         {
             move = false;
+            animator.SetBool("Mirar",true);
             Vector3 targetPostition = new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z);
             this.transform.LookAt(targetPostition);
             yield return null;
@@ -106,7 +110,8 @@ public class InimigoTorre : MonoBehaviour
     }
     private void Morrer()
     {
-        Destroy(cilindro.gameObject);
+        animator.SetTrigger("Morrer");
+        //Destroy(cilindro.gameObject);
     }
     private void OnTriggerExit(Collider other)
     {

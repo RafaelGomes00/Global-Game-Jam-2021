@@ -12,6 +12,7 @@ public class Inimigo : MonoBehaviour
     [SerializeField] private float velocidadeAtaque;
     [SerializeField] private float distanciaAtaque;
     [SerializeField] private int maxVida;
+    [SerializeField] private Animator animator;
 
 
     private float velocidade;
@@ -38,25 +39,28 @@ public class Inimigo : MonoBehaviour
         vida = vida - dano;
         if (vida <= 0)
         {
+            animator.SetTrigger("Morrer");
             Morrer();
         }
     }
     private IEnumerator Atacar()
     {
+
         cooldownAtaque = velocidadeAtaque;
 
-        Coroutine mira = StartCoroutine(Mirar());
+        //Coroutine mira = StartCoroutine(Mirar());
 
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
         //anim.SetTrigger("Atirar");
         //audioSource.PlayOneShot(tiro);
         //anim.SetBool("Atacar", false);
-        StopCoroutine(mira);
+        //StopCoroutine(mira);
         //anim.ResetTrigger("Atirar");
         GameObject balaInstanciada = Instantiate(tiro, pontoTiro.position, pontoTiro.transform.rotation);
         balaInstanciada.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
-        Destroy(balaInstanciada, 10f);
+        animator.SetTrigger("Atacar");
+        Destroy(balaInstanciada, 1f);
         //balaInstanciada.GetComponent<Bala>().SetCasterCollider(this.GetComponent<Collider>());
 
         yield return new WaitForSeconds(velocidadeAtaque);
@@ -98,12 +102,14 @@ public class Inimigo : MonoBehaviour
         if (!move && navMeshAgent != null)
         {
             navMeshAgent.isStopped = true;
+            animator.SetBool("Correr", false);
             return;
         }
 
         if (!morto)
         {
             navMeshAgent.isStopped = false;
+            animator.SetBool("Correr", true);
             navMeshAgent.SetDestination(destino);
         }
     }
