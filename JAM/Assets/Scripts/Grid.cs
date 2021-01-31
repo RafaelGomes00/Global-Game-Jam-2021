@@ -60,35 +60,31 @@ public class Grid : MonoBehaviour
         {
             for (int z = 0; z < gridZ; z++)
             {
-                if ((x < gridX - 1 || z < gridZ -1))
+                if (x < gridX - 1)
                 {
-                    if (matrizGrafo[x + 1, z] == indiceMaior)
+                    if (matrizGrafo[x + 1, z] == indiceMaior && matrizGrafo[x, z] == indiceMaior)
                     {
                         // Ponte horizontal
                         Vector3 verticePonteHoriz = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + new Vector3(12.5f, 0, 0);
                         Instantiate(objetoPonte, verticePonteHoriz, Quaternion.identity, parentescoHierarquiaPontes);
 
                     }
-                    if (matrizGrafo[x, z + 1] == indiceMaior)
+                }
+                if (z < gridZ - 1)
+                {
+                    if (matrizGrafo[x, z + 1] == indiceMaior && matrizGrafo[x, z] == indiceMaior)
                     {
                         // Ponte vertical
                         Vector3 verticePonteVert = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + new Vector3(0, 0, 12.5f);
                         Instantiate(objetoPonte, verticePonteVert, Quaternion.identity, parentescoHierarquiaPontes);
                     }
-
                 }
             }
         }
         #endregion
 
         #region CriarChao
-        for (int x = 0; x < gridX; x++)
-        {
-            for (int z = 0; z < gridZ; z++)
-            {
-                Vector3 vertice = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + Vector3.zero;
-            }
-        }
+
         for (int i = 0; i < 30; i++)
         {
             if (temAlcapao && quantidadeChaves == 3 && temSpawn)
@@ -96,48 +92,17 @@ public class Grid : MonoBehaviour
                 break;
             }
 
-            /*for (int x = 0; x < gridX; x++)
+            for (int x = 0; x < gridX; x++)
             {
                 for (int z = 0; z < gridZ; z++)
                 {
-                    if (!temAlcapao && Random.Range(0, 4) == 2)
-                    {
-                        if (matrizInt[x, z] != null)
-                        {
-                            Debug.Log(matrizInt[x, z] != null);
 
-                            Instantiate(alcaPao, matrizInt[x, z].transform.position, Quaternion.identity);
-                            Destroy(matrizInt[x, z].gameObject);
-                            temAlcapao = true;
-                            xAlcapao = x;
-                            zAlcapao = z;
-                            break;
-                        }
-                    }
-                    else if (quantidadeChaves < 3 && Random.Range(0, 4) == 2)
-                    {
-                        if (matrizInt[x, z] != null)
-                        {
-                            Instantiate(chave, matrizInt[x, z].transform.position, Quaternion.identity, parentescoHierarquiaChaves);
-                            quantidadeChaves++;
-                        }
-                    }
-                    else if (!temSpawn && Random.Range(0, 4) == 2 && x != xAlcapao && z != zAlcapao)
-                    {
-                        if (matrizInt[x, z] != null)
-                        {
-                            spawn = matrizInt[x, z].transform.position + new Vector3(0, 1, 0);
-                            //Controller.controller.spawn = spawn;
-                            temSpawn = true;
-                            Debug.Log(spawn);
-                        }
-                    }
                 }
-            }*/
+            }
         }
 
         #endregion
-        //Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
     
     private void Grafo(int[,] matrizInt)
@@ -148,7 +113,7 @@ public class Grid : MonoBehaviour
         {
             for (int z = 0; z < gridZ; z++)
             {
-                if (matrizGerada[x, z] == 1 || matrizGerada[x,z] == 7)
+                if (matrizGerada[x, z] == 1 || matrizGerada[x,z] == 7 || matrizGerada[x,z] == 4)
                 {
                     matrizGrafo[x, z] = -1;
                 }
