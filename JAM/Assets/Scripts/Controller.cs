@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Controller : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class Controller : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         controller = this;
     }
+    public void CarregarCena(string level)
+    {
+        SceneManager.LoadScene(level);
+    }
     public void LiberarCaminho()
     {
         porta = GameObject.FindGameObjectWithTag("Porta");
@@ -30,5 +35,9 @@ public class Controller : MonoBehaviour
     {
         volumeMusica = sliderMusica.value;
         volumeEfeitos = sliderEfeitos.value;
+    }
+    public void Sair()
+    {
+        Application.Quit();
     }
 }

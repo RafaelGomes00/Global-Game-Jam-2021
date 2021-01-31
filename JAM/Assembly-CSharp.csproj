@@ -55,15 +55,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Modelos\AssetsBaixados\BrokenVector\UltimateDungeonPack\Scenes\Demo\FPControls\Scripts\CharacterController.cs" />
+     <Compile Include="Assets\Modelos\AssetsBaixados\BrokenVector\UltimateDungeonPack\Scenes\Demo\FPControls\Scripts\MouseCamLook.cs" />
+     <Compile Include="Assets\Modelos\AssetsBaixados\BrokenVector\UltimateDungeonPack\Scripts\LightImprove.cs" />
      <Compile Include="Assets\Scripts\CameraScript.cs" />
      <Compile Include="Assets\Scripts\Chave.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\Flecha.cs" />
+     <Compile Include="Assets\Scripts\Gizmo.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\Inimigo.cs" />
      <Compile Include="Assets\Scripts\InimigoTorre.cs" />
      <Compile Include="Assets\Scripts\Machado.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\SimplexNoiseScript.cs" />
      <Compile Include="Assets\Scripts\Tocha.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
  <Reference Include="Unity.Timeline.Editor">
@@ -272,6 +277,9 @@
  </Reference>
  <Reference Include="UnityEngine.XRModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.11f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+ </Reference>
+ <Reference Include="SimplexNoise">
+ <HintPath>C:/Users/henri/OneDrive/Documentos/GitHub/gameJAM/JAM/Assets/Plugins/SimplexNoise.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.11f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
