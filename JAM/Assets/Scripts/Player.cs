@@ -184,12 +184,12 @@ public class Player : MonoBehaviour
         if (!paused)
         {
             float inicioDash = Time.time;
+            animator.SetTrigger("Rolar");
             //RaycastHit hit;
             while (Time.time < inicioDash + tempoDash)
             {
                 rb.velocity = (clampedDir * velocidadeDash) * Time.deltaTime;
                 Debug.Log("nao saiu");
-                animator.SetTrigger("Rolar");
                 yield return null;
             }
         }
