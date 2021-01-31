@@ -3130,6 +3130,11 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4847390857749848136, guid: 63b575527683b4b47962b945fdee171a,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 4847390857749848137, guid: 63b575527683b4b47962b945fdee171a,
         type: 3}
       propertyPath: m_IsTrigger
@@ -3170,6 +3175,11 @@ PrefabInstance:
       propertyPath: morrendoFeedBack
       value: 
       objectReference: {fileID: 1879200893}
+    - target: {fileID: 4847390857749848141, guid: 63b575527683b4b47962b945fdee171a,
+        type: 3}
+      propertyPath: velocidadeReal
+      value: 2000
+      objectReference: {fileID: 0}
     - target: {fileID: 4847390857749848142, guid: 63b575527683b4b47962b945fdee171a,
         type: 3}
       propertyPath: m_LocalPosition.x
