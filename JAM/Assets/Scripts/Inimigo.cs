@@ -48,19 +48,19 @@ public class Inimigo : MonoBehaviour
 
         cooldownAtaque = velocidadeAtaque;
 
-        Coroutine mira = StartCoroutine(Mirar());
+        //Coroutine mira = StartCoroutine(Mirar());
 
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
         //anim.SetTrigger("Atirar");
         //audioSource.PlayOneShot(tiro);
         //anim.SetBool("Atacar", false);
-        StopCoroutine(mira);
+        //StopCoroutine(mira);
         //anim.ResetTrigger("Atirar");
         GameObject balaInstanciada = Instantiate(tiro, pontoTiro.position, pontoTiro.transform.rotation);
         balaInstanciada.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
         animator.SetTrigger("Atacar");
-        Destroy(balaInstanciada, 10f);
+        Destroy(balaInstanciada, 1f);
         //balaInstanciada.GetComponent<Bala>().SetCasterCollider(this.GetComponent<Collider>());
 
         yield return new WaitForSeconds(velocidadeAtaque);

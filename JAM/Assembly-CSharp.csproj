@@ -58,13 +58,14 @@
      <Compile Include="Assets\Scripts\CameraScript.cs" />
      <Compile Include="Assets\Scripts\Chave.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\Flecha.cs" />
      <Compile Include="Assets\Scripts\Grid.cs" />
      <Compile Include="Assets\Scripts\Inimigo.cs" />
      <Compile Include="Assets\Scripts\InimigoTorre.cs" />
+     <Compile Include="Assets\Scripts\Machado.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\Tocha.cs" />
      <Compile Include="Assets\Scripts\UI.cs" />
-     <Compile Include="Assets\Scripts\bala.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/henri/OneDrive/Documentos/GitHub/gameJAM/JAM/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

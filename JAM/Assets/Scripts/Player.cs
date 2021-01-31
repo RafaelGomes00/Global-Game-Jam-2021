@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
             float y = Mathf.Lerp(animY, yAxis, 0.4f);
             float x = Mathf.Lerp(animX, xAxis, 0.4f);
 
-            Vector3 dir = (pontoRotacao.forward * y) + (pontoRotacao.right * x);
+            Vector3 dir = (this.transform.forward * y) + (this.transform.right * x);
             clampedDir = dir;
 
             if (dir.magnitude > 1)
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
             animator.SetBool("Correr", true);
             animX = x;
             animY = y;
-            if(xAxis == 0 && xAxis == 0)
+            if(xAxis == 0 && yAxis == 0)
             {
                 animator.SetBool("Correr", false);
             }
@@ -162,7 +162,7 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && recarregado)
             {
                 animator.SetTrigger("Atacar");
-                GameObject bala = Instantiate(tiro, pontoTiro.position, Quaternion.identity);
+                GameObject bala = Instantiate(tiro, pontoTiro.position, this.transform.rotation);
                 bala.GetComponent<Rigidbody>().AddForce(transform.forward * 20, ForceMode.Impulse);
                 recarregado = false;
                 Destroy(bala, 10f);
