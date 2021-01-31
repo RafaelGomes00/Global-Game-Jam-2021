@@ -281,6 +281,9 @@
  <Reference Include="SimplexNoise">
  <HintPath>C:/Users/guilh/Shared/guilherme/Windows/Git/gameJAM/JAM/Assets/Plugins/SimplexNoise.dll</HintPath>
  </Reference>
+ <Reference Include="SimplexNoise">
+ <HintPath>C:/Users/henri/OneDrive/Documentos/GitHub/gameJAM/JAM/Assets/Plugins/SimplexNoise.dll</HintPath>
+ </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Users/guilh/Shared/guilherme/Windows/Unity/2019.3.11f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
  </Reference>
