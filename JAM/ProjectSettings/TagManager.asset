@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Inimigo
   - InimigoTorre
+  - Ponte
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - 
   - 
   - Cenario
-  - 
+  - Ground
   - 
   - 
   - 

@@ -14,6 +14,8 @@ public class Controller : MonoBehaviour
     private float volumeEfeitos;
     private float volumeMusica;
 
+    public Vector3 spawn;
+
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
