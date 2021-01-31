@@ -10,7 +10,6 @@ public class Grid : MonoBehaviour
     [SerializeField] private float espacamentoGrid;
     [SerializeField] private GameObject objetoChao;
     [SerializeField] private GameObject objetoPonte;
-    [SerializeField] LayerMask layer;
     [SerializeField] private Transform parentescoHierarquiaChao;
     [SerializeField] private Transform parentescoHierarquiaPontes;
     [SerializeField] private Transform parentescoHierarquiaTochas;
@@ -27,33 +26,71 @@ public class Grid : MonoBehaviour
     private bool temAlcapao;
     private int quantidadeChaves;
     private bool temSpawn;
-    GameObject[] pontes;
     private Vector3 spawn;
     private int indiceMaior;
 
     private void Start()
     {
         matrizGerada = this.GetComponent<SimplexNoiseScript>().gerarMatriz(gridX, gridZ);
-        GerarChao();
         quantidadeChaves = 0;
+        temAlcapao = false;
+        temSpawn = false;
+
+        GerarChao();
+
     }
     private void GerarChao()
     {
+        int[] posicaoAlcapao = new int[2];
+        int[] posicaoSpawn = new int[2];
         matrizInt = new int[gridX, gridZ];
         Grafo(matrizInt);
 
-        for (int x = 0; x < gridX; x++)
+        #region criarChao
+        while (!temAlcapao || !temSpawn || quantidadeChaves < 3)
         {
-            for (int z = 0; z < gridZ; z++)
+            for (int x = 0; x < gridX; x++)
             {
-                Vector3 vertice = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + Vector3.zero;
-
-                if (matrizGrafo[x,z] == indiceMaior)
+                for (int z = 0; z < gridZ; z++)
                 {
-                    Instantiate(objetoChao, vertice, Quaternion.identity, parentescoHierarquiaChao);
+                    Vector3 vertice = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + Vector3.zero;
+                    if (matrizGrafo[x, z] == indiceMaior)
+                    {
+
+                        if (!temAlcapao && Random.Range(0, 4) == 2)
+                        {
+                            Instantiate(alcaPao, vertice, Quaternion.identity);
+                            temAlcapao = true;
+                            posicaoAlcapao[0] = x;
+                            posicaoAlcapao[1] = z;
+                        }
+                        else
+                        {
+                            if (!temSpawn && Random.Range(0, 4) == 2)
+                            {
+                                spawn = new Vector3(vertice.x, vertice.y + 0.5f, vertice.z);
+                                temSpawn = true;
+
+                                posicaoSpawn[0] = x;
+                                posicaoSpawn[1] = z;
+                            }
+                            else
+                            {
+                                if (quantidadeChaves < 3 && Random.Range(0, 4) == 2)
+                                {
+                                    Instantiate(chave, vertice, new Quaternion(0, Random.Range(0, 360), 0, 0), parentescoHierarquiaChaves);
+                                    quantidadeChaves++;
+                                }
+                            }
+
+                            Instantiate(objetoChao, vertice, Quaternion.identity, parentescoHierarquiaChao);
+                        }
+                        Instantiate(tochas[Random.Range(0, tochas.Length)], vertice, new Quaternion(0, Random.Range(0, 360), 0, 0), parentescoHierarquiaTochas);
+                    }
                 }
             }
         }
+        #endregion
 
         #region CriarPontes
         for (int x = 0; x < gridX; x++)
@@ -83,28 +120,12 @@ public class Grid : MonoBehaviour
         }
         #endregion
 
-        #region CriarChao
-
-        for (int i = 0; i < 30; i++)
-        {
-            if (temAlcapao && quantidadeChaves == 3 && temSpawn)
-            {
-                break;
-            }
-
-            for (int x = 0; x < gridX; x++)
-            {
-                for (int z = 0; z < gridZ; z++)
-                {
-
-                }
-            }
-        }
-
-        #endregion
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
-    
+    private void GerarChaves(Vector3 vertice)
+    {
+        
+    }
     private void Grafo(int[,] matrizInt)
     {
         matrizGrafo = new int[gridX, gridZ];
