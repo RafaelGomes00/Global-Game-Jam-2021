@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]    
 public class Grid : MonoBehaviour
 {
     [SerializeField] private int gridX;
@@ -14,10 +14,13 @@ public class Grid : MonoBehaviour
     [SerializeField] private Transform parentescoHierarquiaPontes;
     [SerializeField] private Transform parentescoHierarquiaTochas;
     [SerializeField] private Transform parentescoHierarquiaChaves;
+    [SerializeField] private Transform parentescoHierarquiaInimigos;
     [SerializeField] private GameObject[] tochas;
     [SerializeField] private GameObject alcaPao;
     [SerializeField] private GameObject chave;
-    
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject paredePonte;
+    [SerializeField] private GameObject[] inimigos;
 
     private Vector3[] vertices;
     private int[,] matrizGerada;
@@ -29,15 +32,14 @@ public class Grid : MonoBehaviour
     private Vector3 spawn;
     private int indiceMaior;
 
-    private void Start()
+    private void Awake()
     {
         matrizGerada = this.GetComponent<SimplexNoiseScript>().gerarMatriz(gridX, gridZ);
         quantidadeChaves = 0;
         temAlcapao = false;
         temSpawn = false;
-
         GerarChao();
-
+        Instantiate(player, spawn, Quaternion.identity);
     }
     private void GerarChao()
     {
@@ -83,9 +85,50 @@ public class Grid : MonoBehaviour
                                 }
                             }
 
-                            Instantiate(objetoChao, vertice, Quaternion.identity, parentescoHierarquiaChao);
+                            GameObject chao = Instantiate(objetoChao, vertice, Quaternion.identity, parentescoHierarquiaChao);
+
+                            Debug.Log(indiceMaior);
+
+                            /*if (x < gridX - 1)
+                            {
+                                if (matrizGrafo[x + 1, z] != indiceMaior)
+                                {
+                                    Debug.Log(matrizGerada[x + 1, z]);
+                                    Transform chaoChild = chao.transform.GetChild(1);
+                                    Instantiate(paredePonte, chaoChild.transform.position, chaoChild.rotation, chaoChild);
+                                }
+                            }
+                            if (x > 0)
+                            {
+                                if (matrizGrafo[x - 1, z] != indiceMaior)
+                                {
+                                    Debug.Log(matrizGerada[x - 1, z]);
+                                    Transform chaoChild2 = chao.transform.GetChild(0);
+                                    Instantiate(paredePonte, chaoChild2.transform.position, chaoChild2.rotation, chaoChild2);
+                                }
+                            }
+                            if (z < gridZ - 1)
+                            {
+                                if (matrizGrafo[x, z + 1] != indiceMaior)
+                                {
+                                    Debug.Log(matrizGerada[x, z + 1]);
+                                    Transform chaoChild = chao.transform.GetChild(3);
+                                    Instantiate(paredePonte, chaoChild.transform.position, chaoChild.rotation, chaoChild);
+                                }
+                            }
+                            if (z > 0)
+                            {
+                                if (matrizGrafo[x, z - 1] != indiceMaior)
+                                {
+                                    Debug.Log(matrizGerada[x, z - 1]);
+                                    Transform chaoChild2 = chao.transform.GetChild(2);
+                                    Instantiate(paredePonte, chaoChild2.transform.position, chaoChild2.rotation, chaoChild2);
+                                }
+                            }*/
+
                         }
                         Instantiate(tochas[Random.Range(0, tochas.Length)], vertice, new Quaternion(0, Random.Range(0, 360), 0, 0), parentescoHierarquiaTochas);
+                        Instantiate(inimigos[Random.Range(0, inimigos.Length)], vertice, new Quaternion(0, Random.Range(0, 360), 0, 0), parentescoHierarquiaInimigos);
                     }
                 }
             }
@@ -103,7 +146,12 @@ public class Grid : MonoBehaviour
                     {
                         // Ponte horizontal
                         Vector3 verticePonteHoriz = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + new Vector3(12.5f, 0, 0);
-                        Instantiate(objetoPonte, verticePonteHoriz, Quaternion.identity, parentescoHierarquiaPontes);
+                        GameObject ponte = Instantiate(objetoPonte, verticePonteHoriz, Quaternion.identity, parentescoHierarquiaPontes);
+
+                        Transform ponteChild = ponte.transform.GetChild(1);
+                        Instantiate(paredePonte, ponteChild.transform.position, ponteChild.rotation, ponteChild);
+                        Transform ponteChild2 = ponte.transform.GetChild(2);
+                        Instantiate(paredePonte, ponteChild2.transform.position, ponteChild2.rotation, ponteChild2);
 
                     }
                 }
@@ -113,7 +161,12 @@ public class Grid : MonoBehaviour
                     {
                         // Ponte vertical
                         Vector3 verticePonteVert = new Vector3(x * espacamentoGrid, 0, z * espacamentoGrid) + new Vector3(0, 0, 12.5f);
-                        Instantiate(objetoPonte, verticePonteVert, Quaternion.identity, parentescoHierarquiaPontes);
+                        GameObject ponte = Instantiate(objetoPonte, verticePonteVert, Quaternion.identity, parentescoHierarquiaPontes);
+
+                        Transform ponteChild = ponte.transform.GetChild(3);
+                        Instantiate(paredePonte, ponteChild.transform.position, ponteChild.rotation, ponteChild);
+                        Transform ponteChild2 = ponte.transform.GetChild(4);
+                        Instantiate(paredePonte, ponteChild2.transform.position, ponteChild2.rotation, ponteChild2);
                     }
                 }
             }
