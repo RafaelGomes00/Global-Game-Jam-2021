@@ -49,6 +49,9 @@ public class Player : MonoBehaviour
         referenciaImagemVida.fillAmount = vida / maxVida;
         danoFeedBack.CrossFadeAlpha(0, 0f, true);
         morrendoFeedBack.CrossFadeAlpha(0f, 0f, true);
+        velocidade = 0;
+        RotacaoInput = new Vector3();
+        VelocidadeRotacao = new Vector3();
     }
     void Update()
     {
@@ -120,6 +123,7 @@ public class Player : MonoBehaviour
             animY = y;
             if(xAxis == 0 && yAxis == 0)
             {
+                rb.velocity = new Vector3();
                 animator.SetBool("Correr", false);
             }
         }
