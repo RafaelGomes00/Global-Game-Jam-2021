@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
             if (dir.magnitude > 1)
                 clampedDir = dir.normalized;
 
-            rb.velocity = clampedDir * velocidadeReal * Time.deltaTime;
+            rb.velocity = clampedDir * velocidade * Time.deltaTime;
             //transform.position += (clampedDir * velocidade) * Time.deltaTime;
             animator.SetBool("Correr", true);
             animX = x;
